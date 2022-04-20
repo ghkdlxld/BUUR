@@ -8,9 +8,9 @@ from scipy.sparse.linalg import svds
 
 def connect():
     return pymysql.connect(
-        user='buur',
-        passwd='buur1014!',
-        host='j6b102.p.ssafy.io',
+        user='user',
+        passwd='pw',
+        host='domain',
         port=3300,
         db='buur',
         charset='utf8'
@@ -35,9 +35,10 @@ def get_data(buur_db):
 def latent_factor_recommend(review, id):
     df_user_beer_ratings = review.pivot_table(
         'total_score', index='id', columns='beer_id').fillna(0)
-    
+
     # id에 해당하는 행번호를 알기 위한 df
-    df_userid_to_rownum = df_user_beer_ratings.reset_index().rename(columns={"index":"id"})
+    df_userid_to_rownum = df_user_beer_ratings.reset_index().rename(columns={
+        "index": "id"})
 
     # matrix는 pivot table(df_user_beer_rating)값을 matrix로 만든 것
     matrix = df_user_beer_ratings.to_numpy()
@@ -95,7 +96,8 @@ def use_latent(id):
     review, beer = get_data(buur_db)
 
     # 잠재 요소 기반 분석(SVD)
-    df_svd_preds, row_num = latent_factor_recommend(review, id)     # 분석 정보, id에 해당하는 행번호
+    df_svd_preds, row_num = latent_factor_recommend(
+        review, id)     # 분석 정보, id에 해당하는 행번호
 
     # 추천
     alredady_rated, predictions = recommend_beers(
@@ -104,7 +106,7 @@ def use_latent(id):
     return (predictions.to_dict('records'))
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     # db 연결
     buur_db = connect()
 
@@ -112,12 +114,13 @@ if __name__=="__main__":
     review, beer = get_data(buur_db)
 
     # 잠재 요소 기반 분석(SVD)
-    df_svd_preds, row_num = latent_factor_recommend(review, 420)     # 분석 정보, id에 해당하는 행번호
+    df_svd_preds, row_num = latent_factor_recommend(
+        review, 420)     # 분석 정보, id에 해당하는 행번호
 
     # 추천
     alredady_rated, predictions = recommend_beers(
         row_num, df_svd_preds, 420, beer, review, 10)
-    
+
     print("------------row_num------------")
     print(row_num)
     print(predictions.head(10))

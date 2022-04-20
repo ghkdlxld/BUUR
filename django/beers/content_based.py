@@ -8,11 +8,12 @@ from sklearn.metrics.pairwise import cosine_similarity
 def load(path):
     return pd.read_csv(path)
 
+
 if __name__ == "__main__":
     buur_db = pymysql.connect(
-        user='buur',
-        passwd='buur1014!',
-        host='j6b102.p.ssafy.io',
+        user='user',
+        passwd='pw',
+        host='domain',
         db='buurtest',
         charset='utf8'
     )
@@ -33,9 +34,9 @@ if __name__ == "__main__":
     # 해당하는 맥주와 비슷한 6개 추천
 
     db = pymysql.connect(
-        user='buur',
-        passwd='buur1014!',
-        host='j6b102.p.ssafy.io',
+        user='user',
+        passwd='pw',
+        host='domain',
         db='buurtest',
         charset='utf8'
     )
@@ -60,4 +61,3 @@ if __name__ == "__main__":
         insert_sql = "INSERT INTO `similar_beer` VALUES (%s, %s, %s, %s);"
         cursor.executemany(insert_sql, list)
         db.commit()
-
